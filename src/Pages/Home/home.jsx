@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import PageFooter from "../../components/Footer/footer";
 import Navbar from "../../components/Navbar/navbar";
 import ProductCard from "../../components/ProductCard/productCard";
 
@@ -35,6 +36,7 @@ const Home = () => {
           })}
         </div>
       </header>
+      <PageFooter />
     </div>
   );
 };

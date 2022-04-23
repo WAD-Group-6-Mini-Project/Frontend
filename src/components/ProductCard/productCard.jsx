@@ -1,5 +1,7 @@
 import { React } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   Card,
   CardActions,
@@ -9,9 +11,11 @@ import {
   Button,
 } from "@mui/material";
 
+import "./productCard.css";
+
 const ProductCard = (props) => {
   return (
-    <Card sx={{ maxWidth: 345, m: 5 }}>
+    <Card sx={{ maxWidth: 345, m: 5, boxShadow: 5, borderRadius: 2 }}>
       <CardMedia
         component="img"
         height="140"
@@ -27,9 +31,17 @@ const ProductCard = (props) => {
           species, ranging across all continents except Antarctica
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+      <CardActions style={{ alignItems: "end" }}>
+        <Button>
+          <Link
+            className="link"
+            to={{
+              pathname: `/product/${123}`,
+            }}
+          >
+            View Product
+          </Link>
+        </Button>
       </CardActions>
     </Card>
   );
