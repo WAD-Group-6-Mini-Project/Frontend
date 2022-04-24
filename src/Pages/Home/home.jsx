@@ -1,4 +1,5 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
+import axios from "../../api/axiosApi";
 import PageFooter from "../../components/Footer/footer";
 import Navbar from "../../components/Navbar/navbar";
 import ProductCard from "../../components/ProductCard/productCard";
@@ -25,15 +26,34 @@ const Home = () => {
     "Item 16",
     "Item 17",
   ]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      await axios
+        .get("/products")
+        .then((res) => {
+          console.log(res);
+          setProducts(() => res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getProducts();
+  }, []);
   return (
     <div>
       <header>
         <Navbar />
 
         <div className="products">
-          {products.map((product) => {
-            return <ProductCard />;
-          })}
+          {products.length === 0 ? (
+            <h1>No products to Display</h1>
+          ) : (
+            products.map((product) => {
+              return <ProductCard />;
+            })
+          )}
         </div>
       </header>
       <PageFooter />
