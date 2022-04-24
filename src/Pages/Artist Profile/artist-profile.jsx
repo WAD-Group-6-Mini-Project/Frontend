@@ -47,6 +47,7 @@ const ArtistProfilePage = () => {
       //   img: data.get("myFile"),
       id: userData["_id"],
     };
+    console.log(data.get("myFile"));
     console.log(productData);
     await axios
       .post("/product", productData)
@@ -161,12 +162,7 @@ const ArtistProfilePage = () => {
                   aria-describedby="keep-mounted-modal-description"
                 >
                   <Box className="modal-box">
-                    <Box
-                      component="form"
-                      noValidate
-                      onSubmit={handleSubmit}
-                      sx={{ mt: 1 }}
-                    >
+                    <form enctype="multipart/formdata" onSubmit={handleSubmit}>
                       <TextField
                         margin="normal"
                         required
@@ -232,7 +228,7 @@ const ArtistProfilePage = () => {
                       >
                         Upload Product
                       </Button>
-                    </Box>
+                    </form>
                   </Box>
                 </Modal>
               </Item>

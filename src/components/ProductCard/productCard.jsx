@@ -14,21 +14,31 @@ import {
 import "./productCard.css";
 
 const ProductCard = (props) => {
+  console.log(props.product.img.data);
+  const src = props.product.img.data.toString("base64");
+  const imgSrc = `data:image/jpg;base64,${src}`;
+  console.log(imgSrc);
   return (
-    <Card sx={{ maxWidth: 345, m: 5, boxShadow: 5, borderRadius: 2 }}>
+    <Card
+      sx={{ maxWidth: 345, m: 5, boxShadow: 5, borderRadius: 2, width: 250 }}
+    >
       <CardMedia
         component="img"
+        className="image"
         height="140"
-        src={props.path}
         alt={props.name}
       />
+
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {props.product.name}
+        </Typography>
+
+        <Typography gutterBottom variant="h6" component="div">
+          {props.product.tag}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          {props.product.description}
         </Typography>
       </CardContent>
       <CardActions style={{ alignItems: "end" }}>
