@@ -4,4 +4,6 @@
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
+    flex: 1;
+    min-height: 100vh;
 }

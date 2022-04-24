@@ -1,10 +1,11 @@
-import * as React from "react";
+import React from "react";
 import Paper from "@mui/material/Paper";
 import { styled, alpha } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { getUser } from "../../redux/userSlice/userSlice";
 import LocationSvg from "../Location-Svg/location-svg";
+import { Link } from "react-router-dom";
 
 import chennai from "../../assets/icons/chennai.svg";
 import pune from "../../assets/icons/pune.svg";
@@ -109,6 +110,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Navbar = () => {
   const userData = useSelector(getUser);
+
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
@@ -177,9 +179,14 @@ const Navbar = () => {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">
+                  <Link
+                    className="nav-link"
+                    to={{
+                      pathname: `/profile/${userData["userType"]}/${userData["_id"]}`,
+                    }}
+                  >
                     {userData.userName}'s Profile
-                  </Typography>
+                  </Link>
                 </MenuItem>
 
                 <MenuItem onClick={handleCloseUserMenu}>
