@@ -2,22 +2,17 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "../../api/axiosApi";
-
 import { useNavigate } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/userSlice/userSlice";
-
-import "./login.css";
+import "./signup.css";
 
 const darkTheme = createTheme({
   palette: {
@@ -25,24 +20,38 @@ const darkTheme = createTheme({
   },
 });
 
-const SignIn = () => {
+const SignUp = () => {
+  const [city, setCity] = React.useState("Pune");
+
+  const [userType, setType] = React.useState("User");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
+      userName: data.get("username"),
       email: data.get("email"),
       password: data.get("password"),
+      mobile: data.get("mobile"),
+      city: data.get("city"),
+      userType: data.get("userType"),
     };
+    console.log(userData);
     await axios
-      .post("/user/login", userData)
+      .post("/user/signup", userData)
       .then((res) => {
-        console.log(res["data"]["user"]);
-        dispatch(addUser(res["data"]["user"]));
-        alert("Logged In Successfully!");
-        navigate("/home");
+        console.log(res);
+        alert("Account Created Successfully!");
+        navigate("/");
       })
       .catch((e) => {
         console.log("Error : " + e);
@@ -65,7 +74,7 @@ const SignIn = () => {
           >
             <Avatar sx={{ width: 72, height: 72, my: 2 }} />
             <Typography component="h1" variant="h5">
-              Sign in
+              Register
             </Typography>
             <Box
               component="form"
@@ -73,6 +82,16 @@ const SignIn = () => {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+              />
               <TextField
                 margin="normal"
                 required
@@ -93,10 +112,48 @@ const SignIn = () => {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="mobile"
+                label="Phone Number"
+                name="mobile"
+                autoComplete="mobile"
+                autoFocus
               />
+
+              <TextField
+                id="city"
+                name="city"
+                select
+                label="Select City"
+                sx={{ mx: 5, my: 5 }}
+                value={city}
+                onChange={handleCityChange}
+                helperText="Please Select City"
+              >
+                <MenuItem value="Pune">Pune</MenuItem>
+                <MenuItem value="Mumbai">Mumbai</MenuItem>
+                <MenuItem value="Chennai">Chennai</MenuItem>
+                <MenuItem value="Surat">Surat</MenuItem>
+              </TextField>
+
+              <TextField
+                id="type"
+                select
+                name="userType"
+                label="Select Type"
+                sx={{ mx: 5, my: 5 }}
+                value={userType}
+                onChange={handleTypeChange}
+                helperText="Please Select Type"
+              >
+                <MenuItem value="Artist">Artist</MenuItem>
+                <MenuItem value="User">User</MenuItem>
+              </TextField>
+
               <Button
                 type="submit"
                 fullWidth
@@ -112,11 +169,6 @@ const SignIn = () => {
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
               </Grid>
             </Box>
           </Box>
@@ -126,4 +178,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
