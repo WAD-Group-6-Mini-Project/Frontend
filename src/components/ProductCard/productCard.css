@@ -1,7 +1,5 @@
 .link {
     text-decoration: none;
+    color: rgba(rgb(165, 212, 245), green, blue, alpha);
 }
 
-.image {
-    background-image: url(https://picsum.photos/1000)
-}

@@ -14,7 +14,6 @@ const Home = () => {
       await axios
         .get("/products")
         .then((res) => {
-          console.log(res);
           setProducts(() => res.data);
         })
         .catch((e) => {
@@ -33,8 +32,7 @@ const Home = () => {
             <h1>No products to Display</h1>
           ) : (
             products.map((product) => {
-              console.log(product);
-              return <ProductCard product={product} />;
+              return <ProductCard product={product} key={product["_id"]} />;
             })
           )}
         </div>

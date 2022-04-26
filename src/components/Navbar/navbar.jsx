@@ -154,7 +154,9 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="View Cart">
                 <IconButton sx={{ p: 0, mx: 5 }} size="large">
-                  <ShoppingCartIcon sx={{ fontSize: 36 }} />
+                  <Link to={`/cart`} style={{ color: "#ffffff" }}>
+                    <ShoppingCartIcon sx={{ fontSize: 36 }} />
+                  </Link>
                 </IconButton>
               </Tooltip>
               <Tooltip title="Open settings">

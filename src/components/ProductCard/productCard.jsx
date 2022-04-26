@@ -1,5 +1,5 @@
 import { React } from "react";
-
+import { Buffer } from "buffer";
 import { Link } from "react-router-dom";
 
 import {
@@ -14,10 +14,6 @@ import {
 import "./productCard.css";
 
 const ProductCard = (props) => {
-  console.log(props.product.img.data);
-  const src = props.product.img.data.toString("base64");
-  const imgSrc = `data:image/jpg;base64,${src}`;
-  console.log(imgSrc);
   return (
     <Card
       sx={{ maxWidth: 345, m: 5, boxShadow: 5, borderRadius: 2, width: 250 }}
@@ -27,6 +23,9 @@ const ProductCard = (props) => {
         className="image"
         height="140"
         alt={props.name}
+        src={`data:image/png;base64,${Buffer.from(props.product.img).toString(
+          "base64"
+        )}`}
       />
 
       <CardContent>
@@ -45,9 +44,8 @@ const ProductCard = (props) => {
         <Button>
           <Link
             className="link"
-            to={{
-              pathname: `/product/${123}`,
-            }}
+            to={`/product/${props.product._id}`}
+            state={{ productId: props.product._id }}
           >
             View Product
           </Link>

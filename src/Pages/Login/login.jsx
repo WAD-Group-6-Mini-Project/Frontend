@@ -39,7 +39,6 @@ const SignIn = () => {
     await axios
       .post("/user/login", userData)
       .then((res) => {
-        console.log(res["data"]["user"]);
         dispatch(addUser(res["data"]["user"]));
         alert("Logged In Successfully!");
         navigate("/home");

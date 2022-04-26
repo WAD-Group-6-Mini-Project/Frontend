@@ -14,7 +14,6 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import axios from "../../api/axiosApi";
 
 import "./artist-profile.css";
@@ -39,20 +38,19 @@ const ArtistProfilePage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const productData = {
-      name: data.get("name"),
-      tag: data.get("tag"),
-      description: data.get("description"),
-      price: data.get("price"),
-      //   img: data.get("myFile"),
-      id: userData["_id"],
-    };
-    console.log(data.get("myFile"));
-    console.log(productData);
+
+    const productData = new FormData();
+
+    productData.append("productImg", data.get("productImg"));
+    productData.append("name", data.get("name"));
+    productData.append("tag", data.get("tag"));
+    productData.append("description", data.get("description"));
+    productData.append("price", data.get("price"));
+    productData.append("artistId", userData["_id"]);
+
     await axios
       .post("/product", productData)
       .then((res) => {
-        console.log(res);
         alert("Product Upload Successully");
       })
       .catch((e) => {
@@ -209,9 +207,8 @@ const ArtistProfilePage = () => {
                         accept="image/*"
                         style={{ display: "none" }}
                         id="raised-button-file"
-                        multiple
                         type="file"
-                        name="myFile"
+                        name="productImg"
                       />
                       <label htmlFor="raised-button-file">
                         <Button variant="outlined" component="span" primary>
