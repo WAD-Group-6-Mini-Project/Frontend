@@ -10,10 +10,12 @@ import { Card, List, Button, Divider } from "@mui/material";
 import PageFooter from "../../components/Footer/footer";
 import CartItem from "./cart-item";
 
+import { useNavigate } from "react-router-dom";
+
 import "./cart.css";
-import { Link } from "react-router-dom";
 
 const Cart = (props) => {
+  const navigate = useNavigate();
   const userData = useSelector(getUser);
   const [cart, setCart] = useState([]);
 
@@ -50,14 +52,16 @@ const Cart = (props) => {
       });
   };
 
-  const checkout = () => {
-    console.log(cart);
-    axios
+  const checkout = async () => {
+    await axios
       .post(`/user/checkout/${userData["_id"]}`, { cart })
-      .then((res) => {})
+      .then((res) => {
+        alert("Confirm Order?");
+      })
       .catch((e) => {
         console.log(e);
       });
+    navigate("/checkout", { state: { _id: userData["_id"] } });
   };
 
   return (
@@ -73,15 +77,9 @@ const Cart = (props) => {
             })}
           </List>
 
-          <Link
-            to={`/checkout`}
-            state={{ userId: userData["_id"] }}
-            style={{ textDecoration: "none" }}
-          >
-            <Button variant="outlined" onClick={checkout}>
-              Proceed to Checkout
-            </Button>
-          </Link>
+          <Button variant="outlined" onClick={checkout}>
+            Proceed to Checkout
+          </Button>
         </Card>
       </div>
 

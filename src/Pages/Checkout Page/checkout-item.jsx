@@ -14,6 +14,11 @@ import InfoIcon from "@mui/icons-material/Info";
 
 const CheckoutItem = (props) => {
   const price = props.item.quantity * props.item.price;
+
+  if (!props.item.quantity || !props.item.price) {
+    return <div>Loading</div>;
+  }
+
   return (
     <div>
       <ListItemButton>
