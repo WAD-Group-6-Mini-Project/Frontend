@@ -37,7 +37,6 @@ const ProductPage = (props) => {
     await axios
       .post(`/user/cart`, data)
       .then((res) => {
-        console.log(res);
         alert("Product added to cart succesfully!!");
       })
       .catch((e) => {
@@ -105,14 +104,17 @@ const ProductPage = (props) => {
             </Grid>
             <Grid item xs={2} sm={4} md={6}>
               <Item>
+                <h2 style={{ margin: "5%" }}>{product.name}</h2>
+
                 <Typography
                   variant="h6"
                   gutterBottom
                   component="div"
-                  align="left"
+                  style={{ marginBottom: "5%" }}
                 >
-                  Product Name: {product.name}
+                  By : Janhavi Kolte
                 </Typography>
+
                 <Typography
                   variant="h6"
                   gutterBottom
@@ -121,7 +123,12 @@ const ProductPage = (props) => {
                 >
                   Description:
                 </Typography>
-                <Typography variant="body1" gutterBottom>
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  style={{ marginTop: "2%", marginBottom: "5%" }}
+                  align="left"
+                >
                   {product.description}
                 </Typography>
                 <Typography
@@ -132,17 +139,10 @@ const ProductPage = (props) => {
                 >
                   Price: {product.price["$numberDecimal"].toString()}
                 </Typography>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  component="div"
-                  align="left"
-                >
-                  By : Janhavi Kolte
-                </Typography>
-                <Stack spacing={2} direction="row">
+
+                <Stack spacing={2} direction="row" style={{ margin: "5%" }}>
                   <Button
-                    variant="Add to Cart"
+                    variant="outlined"
                     onClick={() =>
                       addtoCart(product._id, product.name, userData._id)
                     }
@@ -150,7 +150,8 @@ const ProductPage = (props) => {
                     Add to Cart
                   </Button>
                   <Button
-                    variant="Wish list"
+                    variant="outlined"
+                    color="success"
                     onClick={() =>
                       addtoWishlist(product._id, product.name, userData._id)
                     }

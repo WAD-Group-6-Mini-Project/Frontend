@@ -29,22 +29,6 @@ import PageFooter from "../../components/Footer/footer";
 
 const CartItem = (props) => {
   const [count, setCount] = useState(0);
-  const userData = useSelector(getUser);
-
-  const removeItem = (product_id) => {
-    const data = {
-      product_id,
-      userId: userData["_id"],
-    };
-    axios
-      .delete(`/user/cart/`, data)
-      .then((res) => {
-        alert("Product removed from cart!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
   return (
     <div>
@@ -62,7 +46,7 @@ const CartItem = (props) => {
           <ChevronRightIcon />
         </IconButton>
 
-        <IconButton onClick={removeItem}>
+        <IconButton onClick={() => props.delete(props.item._id)}>
           <CancelIcon />
         </IconButton>
       </ListItemButton>

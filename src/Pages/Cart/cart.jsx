@@ -35,7 +35,6 @@ const Cart = (props) => {
       await axios
         .get(`/user/cart/${userData["_id"]}`)
         .then((res) => {
-          console.log(res.data);
           setCart(() => res.data);
         })
         .catch((e) => {
@@ -44,6 +43,26 @@ const Cart = (props) => {
     };
     getCart();
   }, []);
+
+  const removeItem = (product_id) => {
+    const data = {
+      product_id,
+      userId: userData["_id"],
+    };
+
+    setCart(() => cart.filter((item) => item._id !== data.product_id));
+
+    console.log(cart);
+    axios
+      .delete(`/user/cart`, { data: data })
+      .then((res) => {
+        alert("Product removed from cart!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <div>
       <Navbar />
@@ -53,7 +72,7 @@ const Cart = (props) => {
           <Divider style={{ margin: "2%" }} />
           <List>
             {cart.map((item) => {
-              return <CartItem item={item} />;
+              return <CartItem item={item} delete={removeItem} />;
             })}
           </List>
         </Card>
