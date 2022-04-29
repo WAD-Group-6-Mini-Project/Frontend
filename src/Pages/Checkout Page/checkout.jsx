@@ -1,26 +1,23 @@
 import { React, useState, useEffect } from "react";
-
 import axios from "../../api/axiosApi";
 import { getUser } from "../../redux/userSlice/userSlice";
 import { useSelector } from "react-redux";
-
 import Navbar from "../../components/Navbar/navbar";
-
+import { useLocation } from "react-router-dom";
 import { Card, List, Button, Divider } from "@mui/material";
 import PageFooter from "../../components/Footer/footer";
-import CartItem from "./cart-item";
+import CheckoutItem from "./checkout-item";
+import "./checkout.css";
 
-import "./cart.css";
-import { Link } from "react-router-dom";
-
-const Cart = (props) => {
+const Checkout = (props) => {
+  const { state } = useLocation();
   const userData = useSelector(getUser);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const getCart = async () => {
       await axios
-        .get(`/user/cart/${userData["_id"]}`)
+        .get(`/user/cart/${state.userId}`)
         .then((res) => {
           setCart(() => res.data);
         })
@@ -29,7 +26,7 @@ const Cart = (props) => {
         });
     };
     getCart();
-  }, [userData]);
+  }, [state]);
 
   const removeItem = (product_id) => {
     const data = {
@@ -50,38 +47,21 @@ const Cart = (props) => {
       });
   };
 
-  const checkout = () => {
-    console.log(cart);
-    axios
-      .post(`/user/checkout/${userData["_id"]}`, { cart })
-      .then((res) => {})
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
   return (
     <div>
       <Navbar />
       <div className="cart-content">
         <Card className="cart-card">
-          <h1>SHOPPING CART</h1>
+          <h1>CHECKOUT</h1>
           <Divider style={{ margin: "2%" }} />
           <List>
             {cart.map((item) => {
-              return <CartItem item={item} delete={removeItem} />;
+              return <CheckoutItem item={item} delete={removeItem} />;
             })}
           </List>
-
-          <Link
-            to={`/checkout`}
-            state={{ userId: userData["_id"] }}
-            style={{ textDecoration: "none" }}
-          >
-            <Button variant="outlined" onClick={checkout}>
-              Proceed to Checkout
-            </Button>
-          </Link>
+          <Button variant="outlined" onClick={null}>
+            Confirm
+          </Button>
         </Card>
       </div>
 
@@ -90,4 +70,4 @@ const Cart = (props) => {
   );
 };
 
-export default Cart;
+export default Checkout;

@@ -8,6 +8,7 @@ import SignUp from "./Pages/Signup/signup";
 import UserProfilePage from "./Pages/User Profile/user-profile";
 import ArtistProfilePage from "./Pages/Artist Profile/artist-profile";
 import Cart from "./Pages/Cart/cart";
+import Checkout from "./Pages/Checkout Page/checkout";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/profile/user/:id" element={<UserProfilePage />} />
           <Route path="/profile/artist/:id" element={<ArtistProfilePage />} />
