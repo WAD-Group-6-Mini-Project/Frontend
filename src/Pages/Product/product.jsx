@@ -73,7 +73,7 @@ const ProductPage = (props) => {
         });
     };
     getProducts();
-  }, []);
+  }, [state]);
 
   if (product.img) {
     return (

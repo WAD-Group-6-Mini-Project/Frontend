@@ -20,6 +20,7 @@ const Home = () => {
           console.log(e);
         });
     };
+
     getProducts();
   }, []);
   return (

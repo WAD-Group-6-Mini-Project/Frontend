@@ -84,6 +84,7 @@ const ArtistProfilePage = () => {
     productData.append("description", data.get("description"));
     productData.append("price", data.get("price"));
     productData.append("artistId", userData["_id"]);
+    productData.append("artistName", userData["userName"]);
 
     await axios
       .post("/product", productData)

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { styled, alpha } from "@mui/material/styles";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { getUser } from "../../redux/userSlice/userSlice";
 import LocationSvg from "../Location-Svg/location-svg";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import chennai from "../../assets/icons/chennai.svg";
 import pune from "../../assets/icons/pune.svg";
@@ -44,6 +45,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HelpIcon from "@mui/icons-material/Help";
 
 import "./navbar.css";
+import axios from "../../api/axiosApi";
 
 const darkTheme = createTheme({
   palette: {
@@ -108,13 +110,17 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const navigate = useNavigate();
   const userData = useSelector(getUser);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [location, setLocation] = React.useState("Pune");
+
+  const [artists, setArtists] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
@@ -134,6 +140,44 @@ const Navbar = () => {
   const handleDrawerClose = () => {
     setOpenDrawer(false);
   };
+
+  const logout = () => {
+    axios
+      .post("/logout", { _id: userData["_id"] })
+      .then((res) => {
+        alert("Log Out Successful");
+        navigate("/");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    const getArtists = async () => {
+      await axios
+        .post("/user/artists", { limit: 4 })
+        .then((res) => {
+          setArtists(() => res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const getTags = async () => {
+      await axios
+        .get("/product/tags")
+        .then((res) => {
+          setTags(() => res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getArtists();
+    getTags();
+  }, []);
 
   return (
     <div>
@@ -195,7 +239,7 @@ const Navbar = () => {
                   <Typography textAlign="center">Settings</Typography>
                 </MenuItem>
 
-                <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem onClick={logout}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
               </Menu>
@@ -290,58 +334,48 @@ const Navbar = () => {
           </DrawerHeader>
           <Divider />
           <h5>Shop By Artists</h5>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonOutlineIcon />
-              </ListItemIcon>
-              <ListItemText primary="Ruturaj Patil" />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonOutlineIcon />
-              </ListItemIcon>
-              <ListItemText primary="Sudeep" />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonOutlineIcon />
-              </ListItemIcon>
-              <ListItemText primary="Janhavi Kolte" />
-            </ListItem>
-          </List>
+          {artists.map((artist) => {
+            return (
+              <List>
+                <ListItem
+                  button
+                  onClick={() =>
+                    navigate("/product/artists", {
+                      state: { _id: artist["_id"] },
+                    })
+                  }
+                >
+                  <ListItemIcon>
+                    <PersonOutlineIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={artist.userName} />
+                </ListItem>
+              </List>
+            );
+          })}
+
           <Divider />
           <h5>Shop By Categories</h5>
           <List>
-            <ListItem button>
-              <ListItemIcon>
-                <LabelIcon />
-              </ListItemIcon>
-              <ListItemText primary="Artwork" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <LabelIcon />
-              </ListItemIcon>
-              <ListItemText primary="Paintings" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <LabelIcon />
-              </ListItemIcon>
-              <ListItemText primary="Books" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <LabelIcon />
-              </ListItemIcon>
-              <ListItemText primary="Sculptures" />
-            </ListItem>
+            {tags.map((tag) => {
+              return (
+                <ListItem
+                  button
+                  onClick={() =>
+                    navigate("/product/tags", {
+                      state: { tag: tag },
+                    })
+                  }
+                >
+                  <ListItemIcon>
+                    <LabelIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={tag} />
+                </ListItem>
+              );
+            })}
           </List>
+
           <Divider />
           <h5>Help and Settings</h5>
           <List>
