@@ -14,10 +14,6 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import InfoIcon from "@mui/icons-material/Info";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import axios from "../../api/axiosApi";
 
 import "./user-profile.css";
@@ -35,10 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const ArtistProfilePage = () => {
   const userData = useSelector(getUser);
-  const [openModal, setOpenModal] = useState(false);
   const [wishlist, setWishList] = useState([]);
-  const handleModalOpen = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
 
   useEffect(() => {
     const getWishList = async () => {
@@ -55,30 +48,6 @@ const ArtistProfilePage = () => {
 
     getWishList();
   }, [userData]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    const productData = new FormData();
-
-    productData.append("productImg", data.get("productImg"));
-    productData.append("name", data.get("name"));
-    productData.append("tag", data.get("tag"));
-    productData.append("description", data.get("description"));
-    productData.append("price", data.get("price"));
-    productData.append("artistId", userData["_id"]);
-
-    await axios
-      .post("/product", productData)
-      .then((res) => {
-        alert("Product Upload Successully");
-      })
-      .catch((e) => {
-        console.log("Error : " + e);
-        alert("Error Occured : ", e);
-      });
-  };
 
   return (
     <div>
@@ -114,91 +83,11 @@ const ArtistProfilePage = () => {
                   {userData.city}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  body1. Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum
-                  inventore consectetur, neque doloribus, cupiditate numquam
-                  dignissimos laborum fugiat deleniti? Eum quasi quidem
-                  quibusdam.
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
+                  blanditiis tenetur unde suscipit, quam beatae rerum inventore
+                  consectetur, neque doloribus, cupiditate numquam dignissimos
+                  laborum fugiat deleniti? Eum quasi quidem quibusdam.
                 </Typography>
-                <Button variant="outlined" onClick={handleModalOpen}>
-                  Upload Product
-                </Button>
-                <Modal
-                  keepMounted
-                  open={openModal}
-                  onClose={handleModalClose}
-                  aria-labelledby="keep-mounted-modal-title"
-                  aria-describedby="keep-mounted-modal-description"
-                >
-                  <Box className="modal-box">
-                    <form enctype="multipart/formdata" onSubmit={handleSubmit}>
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="name"
-                        label="Product name"
-                        name="name"
-                        autoComplete="name"
-                        autoFocus
-                      />
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="tag"
-                        label="Product Tag"
-                        name="tag"
-                        autoComplete="tag"
-                        autoFocus
-                      />
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="price"
-                        label="Product Price"
-                        type="number"
-                        id="password"
-                        autoComplete="price"
-                      />
-
-                      <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="description"
-                        label="Product Description"
-                        name="description"
-                        autoComplete="description"
-                        autoFocus
-                      />
-
-                      <input
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        id="raised-button-file"
-                        type="file"
-                        name="productImg"
-                      />
-                      <label htmlFor="raised-button-file">
-                        <Button variant="outlined" component="span" primary>
-                          Upload
-                        </Button>
-                      </label>
-
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="success"
-                        sx={{ mt: 3, mb: 2 }}
-                      >
-                        Upload Product
-                      </Button>
-                    </form>
-                  </Box>
-                </Modal>
               </Item>
             </Grid>
           </Grid>
