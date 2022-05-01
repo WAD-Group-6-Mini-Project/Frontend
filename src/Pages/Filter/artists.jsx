@@ -39,13 +39,13 @@ const FilterArtists = (props) => {
           <Divider style={{ margin: "2%" }} />
 
           {products.length === 0 ? (
-            <div class="fof">
+            <div className="fof">
               <h1>Artist seems busy...</h1>
             </div>
           ) : (
-            products.map((item) => {
+            products.map((item, index) => {
               return (
-                <List>
+                <List key={index}>
                   <FilterItem item={item} />
                 </List>
               );

@@ -356,9 +356,9 @@ const Navbar = (props) => {
           </DrawerHeader>
           <Divider />
           <h5>Shop By Artists</h5>
-          {artists.map((artist) => {
+          {artists.map((artist, index) => {
             return (
-              <List>
+              <List key={index}>
                 <ListItem
                   button
                   onClick={() => {
@@ -380,9 +380,10 @@ const Navbar = (props) => {
           <Divider />
           <h5>Shop By Categories</h5>
           <List>
-            {tags.map((tag) => {
+            {tags.map((tag, index) => {
               return (
                 <ListItem
+                  key={index}
                   button
                   onClick={() => {
                     handleDrawerClose();

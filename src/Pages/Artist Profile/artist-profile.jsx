@@ -153,7 +153,7 @@ const ArtistProfilePage = () => {
                   aria-describedby="keep-mounted-modal-description"
                 >
                   <Box className="modal-box">
-                    <form enctype="multipart/formdata" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} encType="multipart/formdata">
                       <TextField
                         margin="normal"
                         required
@@ -204,7 +204,11 @@ const ArtistProfilePage = () => {
                         name="productImg"
                       />
                       <label htmlFor="raised-button-file">
-                        <Button variant="outlined" component="span" primary>
+                        <Button
+                          variant="outlined"
+                          component="span"
+                          color="success"
+                        >
                           Upload
                         </Button>
                       </label>
