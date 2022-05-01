@@ -60,7 +60,6 @@ const ArtistProfilePage = () => {
         .get(`/user/products/${userData["_id"]}`)
         .then((res) => {
           setProducts(() => res.data);
-          console.log(res.data);
         })
         .catch((e) => {
           console.log("Error : " + e);
@@ -76,6 +75,11 @@ const ArtistProfilePage = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    const artistData = {
+      _id: userData["_id"],
+      userName: userData["userName"],
+    };
+
     const productData = new FormData();
 
     productData.append("productImg", data.get("productImg"));
@@ -83,12 +87,13 @@ const ArtistProfilePage = () => {
     productData.append("tag", data.get("tag"));
     productData.append("description", data.get("description"));
     productData.append("price", data.get("price"));
-    productData.append("artistId", userData["_id"]);
-    productData.append("artistName", userData["userName"]);
+    productData.append("artist", JSON.stringify(artistData));
 
     await axios
       .post("/product", productData)
       .then((res) => {
+        handleModalClose();
+        event.target.reset();
         alert("Product Upload Successully");
       })
       .catch((e) => {

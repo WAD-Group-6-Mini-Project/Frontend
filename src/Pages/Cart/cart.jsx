@@ -41,7 +41,6 @@ const Cart = (props) => {
 
     setCart(() => cart.filter((item) => item._id !== data.product_id));
 
-    console.log(cart);
     axios
       .delete(`/user/cart`, { data: data })
       .then((res) => {

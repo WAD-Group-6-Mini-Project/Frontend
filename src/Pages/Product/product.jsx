@@ -112,7 +112,7 @@ const ProductPage = (props) => {
                   component="div"
                   style={{ marginBottom: "5%" }}
                 >
-                  By : Janhavi Kolte
+                  By : {product.artist["userName"]}
                 </Typography>
 
                 <Typography

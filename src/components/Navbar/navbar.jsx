@@ -42,7 +42,6 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LabelIcon from "@mui/icons-material/Label";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import HelpIcon from "@mui/icons-material/Help";
 
 import "./navbar.css";
 import axios from "../../api/axiosApi";
@@ -185,14 +184,21 @@ const Navbar = (props) => {
         <AppBar position="static" className="upper-nav">
           <Toolbar variant="dense">
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              <Typography
-                variant="h4"
-                noWrap
-                component="div"
-                sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+              <Link
+                className="nav-link"
+                to={{
+                  pathname: `/home`,
+                }}
               >
-                CRAFTSMAN'S APPRENTICE
-              </Typography>
+                <Typography
+                  variant="h4"
+                  noWrap
+                  component="div"
+                  sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+                >
+                  CRAFTSMAN'S APPRENTICE
+                </Typography>
+              </Link>
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
@@ -235,10 +241,6 @@ const Navbar = (props) => {
                   </Link>
                 </MenuItem>
 
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Settings</Typography>
-                </MenuItem>
-
                 <MenuItem onClick={logout}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
@@ -275,25 +277,45 @@ const Navbar = (props) => {
                     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                   >
                     <Grid item xs={6}>
-                      <IconButton onClick={() => setLocation("Pune")}>
+                      <IconButton
+                        onClick={() => {
+                          handleModalClose();
+                          setLocation("Pune");
+                        }}
+                      >
                         <LocationSvg path={pune} location="Pune" />
                       </IconButton>
                       <Item>Pune</Item>
                     </Grid>
                     <Grid item xs={6}>
-                      <IconButton onClick={() => setLocation("Mumbai")}>
+                      <IconButton
+                        onClick={() => {
+                          handleModalClose();
+                          setLocation("Mumbai");
+                        }}
+                      >
                         <LocationSvg path={mumbai} location="Mumbai" />
                       </IconButton>
                       <Item>Mumbai</Item>
                     </Grid>
                     <Grid item xs={6}>
-                      <IconButton onClick={() => setLocation("Surat")}>
+                      <IconButton
+                        onClick={() => {
+                          handleModalClose();
+                          setLocation("Surat");
+                        }}
+                      >
                         <LocationSvg path={surat} location="Surat" />
                       </IconButton>
                       <Item>Surat</Item>
                     </Grid>
                     <Grid item xs={6}>
-                      <IconButton onClick={() => setLocation("Chennai")}>
+                      <IconButton
+                        onClick={() => {
+                          handleModalClose();
+                          setLocation("Chennai");
+                        }}
+                      >
                         <LocationSvg path={chennai} location="chennai" />
                       </IconButton>
                       <Item>Chennai</Item>
@@ -339,11 +361,12 @@ const Navbar = (props) => {
               <List>
                 <ListItem
                   button
-                  onClick={() =>
+                  onClick={() => {
+                    handleDrawerClose();
                     navigate("/product/artists", {
                       state: { _id: artist["_id"] },
-                    })
-                  }
+                    });
+                  }}
                 >
                   <ListItemIcon>
                     <PersonOutlineIcon />
@@ -361,11 +384,12 @@ const Navbar = (props) => {
               return (
                 <ListItem
                   button
-                  onClick={() =>
+                  onClick={() => {
+                    handleDrawerClose();
                     navigate("/product/tags", {
                       state: { tag: tag },
-                    })
-                  }
+                    });
+                  }}
                 >
                   <ListItemIcon>
                     <LabelIcon />
@@ -379,19 +403,17 @@ const Navbar = (props) => {
           <Divider />
           <h5>Help and Settings</h5>
           <List>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                handleDrawerClose();
+                navigate(`/profile/${userData["userType"]}/${userData["_id"]}`);
+              }}
+            >
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Your Account" />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <HelpIcon />
-              </ListItemIcon>
-              <ListItemText primary="Customer Service" />
             </ListItem>
           </List>
         </Drawer>

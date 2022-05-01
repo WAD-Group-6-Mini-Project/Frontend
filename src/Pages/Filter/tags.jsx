@@ -1,8 +1,6 @@
 import { React, useState, useEffect } from "react";
 
 import axios from "../../api/axiosApi";
-import { getUser } from "../../redux/userSlice/userSlice";
-import { useSelector } from "react-redux";
 
 import Navbar from "../../components/Navbar/navbar";
 
@@ -16,7 +14,6 @@ import FilterItem from "./filter-item";
 
 const FilterArtists = (props) => {
   const { state } = useLocation();
-  const userData = useSelector(getUser);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -24,7 +21,6 @@ const FilterArtists = (props) => {
       await axios
         .post("/product/category", { tag: state.tag })
         .then((res) => {
-          console.log(res.data);
           setProducts(() => res.data);
         })
         .catch((e) => {
@@ -43,7 +39,6 @@ const FilterArtists = (props) => {
           <Divider style={{ margin: "2%" }} />
           <List>
             {products.map((item) => {
-              console.log(item);
               return <FilterItem item={item} />;
             })}
           </List>
