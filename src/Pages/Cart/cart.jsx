@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./cart.css";
 
-const Cart = (props) => {
+const Cart = () => {
   const navigate = useNavigate();
   const userData = useSelector(getUser);
   const [cart, setCart] = useState([]);

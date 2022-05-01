@@ -6,7 +6,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-const PageFooter = (props) => {
+const PageFooter = () => {
   return (
     <footer className="footer">
       <div className="container">

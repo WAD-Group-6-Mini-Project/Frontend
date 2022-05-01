@@ -12,7 +12,7 @@ import { useLocation } from "react-router-dom";
 import "./filter.css";
 import FilterItem from "./filter-item";
 
-const FilterArtists = (props) => {
+const FilterArtists = () => {
   const { state } = useLocation();
   const [products, setProducts] = useState([]);
 

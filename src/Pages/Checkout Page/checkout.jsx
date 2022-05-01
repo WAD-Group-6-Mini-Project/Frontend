@@ -13,7 +13,7 @@ import CheckoutItem from "./checkout-item";
 
 import "./checkout.css";
 
-const Checkout = (props) => {
+const Checkout = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const userData = useSelector(getUser);

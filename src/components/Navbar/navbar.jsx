@@ -109,7 +109,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Navbar = (props) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const userData = useSelector(getUser);
 

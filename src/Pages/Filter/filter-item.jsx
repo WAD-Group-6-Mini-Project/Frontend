@@ -11,7 +11,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import InfoIcon from "@mui/icons-material/Info";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const FilterItem = (props) => {
   const navigate = useNavigate();

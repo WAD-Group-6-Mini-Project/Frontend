@@ -23,7 +23,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const ProductPage = (props) => {
+const ProductPage = () => {
   const { state } = useLocation();
   const [product, setProduct] = useState({});
   const userData = useSelector(getUser);
