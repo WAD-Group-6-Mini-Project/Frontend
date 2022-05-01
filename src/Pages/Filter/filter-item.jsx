@@ -1,7 +1,6 @@
 import { React } from "react";
 
 import { Buffer } from "buffer";
-import { Link } from "react-router-dom";
 import "./filter.css";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -15,7 +14,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const FilterItem = (props) => {
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   const product = () => {
