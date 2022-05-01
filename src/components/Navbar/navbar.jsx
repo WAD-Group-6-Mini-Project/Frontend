@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { styled, alpha } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+import Badge from "@mui/material/Badge";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { getUser } from "../../redux/userSlice/userSlice";
 import LocationSvg from "../Location-Svg/location-svg";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import Autocomplete from "@mui/material/Autocomplete";
 import chennai from "../../assets/icons/chennai.svg";
 import pune from "../../assets/icons/pune.svg";
 import surat from "../../assets/icons/surat.svg";
@@ -109,9 +110,11 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Navbar = () => {
+const Navbar = (props) => {
   const navigate = useNavigate();
   const userData = useSelector(getUser);
+  const [cart, setCart] = useState(0);
+  const [products, setProducts] = useState([]);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [openDrawer, setOpenDrawer] = React.useState(false);
@@ -174,253 +177,303 @@ const Navbar = () => {
           console.log(e);
         });
     };
+
+    const getCart = async () => {
+      await axios
+        .get(`/cart-count/${userData["_id"]}`)
+        .then((res) => {
+          setCart(() => res.data.cart);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const getProducts = async () => {
+      await axios
+        .get("/products")
+        .then((res) => {
+          setProducts(() => res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
     getArtists();
     getTags();
-  }, []);
+    getCart();
+    getProducts();
+  }, [userData]);
 
-  return (
-    <div>
-      <ThemeProvider theme={darkTheme}>
-        <AppBar position="static" className="upper-nav">
-          <Toolbar variant="dense">
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              <Link
-                className="nav-link"
-                to={{
-                  pathname: `/home`,
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  noWrap
-                  component="div"
-                  sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+  if (
+    artists.length !== 0 &&
+    tags.length !== 0 &&
+    cart.length !== 0 &&
+    products.length !== 0
+  )
+    return (
+      <div>
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="static" className="upper-nav">
+            <Toolbar variant="dense">
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                <Link
+                  className="nav-link"
+                  to={{
+                    pathname: `/home`,
+                  }}
                 >
-                  CRAFTSMAN'S APPRENTICE
-                </Typography>
-              </Link>
-            </Box>
+                  <Typography
+                    variant="h4"
+                    noWrap
+                    component="div"
+                    sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+                  >
+                    CRAFTSMAN'S APPRENTICE
+                  </Typography>
+                </Link>
+              </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="View Cart">
-                <IconButton sx={{ p: 0, mx: 5 }} size="large">
-                  <Link to={`/cart`} style={{ color: "#ffffff" }}>
-                    <ShoppingCartIcon sx={{ fontSize: 36 }} />
-                  </Link>
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="View Cart">
+                  <IconButton sx={{ p: 0, mx: 5 }} size="large">
+                    <Link to={`/cart`} style={{ color: "#ffffff" }}>
+                      <Badge color="secondary" badgeContent={cart}>
+                        <ShoppingCartIcon sx={{ fontSize: 36 }} />
+                      </Badge>
+                    </Link>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Link
+                      className="nav-link"
+                      to={{
+                        pathname: `/profile/${userData["userType"]}/${userData["_id"]}`,
+                      }}
+                    >
+                      {userData.userName}'s Profile
+                    </Link>
+                  </MenuItem>
+
+                  <MenuItem onClick={logout}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Toolbar>
+          </AppBar>
+
+          <AppBar position="static" className="search-nav">
+            <Toolbar variant="dense" className="search-toolbar">
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={handleDrawerOpen}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link
-                    className="nav-link"
-                    to={{
-                      pathname: `/profile/${userData["userType"]}/${userData["_id"]}`,
+                <MenuIcon />
+              </IconButton>
+              <Button onClick={handleModalOpen}>{location}</Button>
+
+              <Modal
+                keepMounted
+                open={openModal}
+                onClose={handleModalClose}
+                aria-labelledby="keep-mounted-modal-title"
+                aria-describedby="keep-mounted-modal-description"
+              >
+                <Box className="modal-box">
+                  <div className="locations">
+                    <Grid
+                      container
+                      rowSpacing={1}
+                      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                    >
+                      <Grid item xs={6}>
+                        <IconButton
+                          onClick={() => {
+                            handleModalClose();
+                            setLocation("Pune");
+                          }}
+                        >
+                          <LocationSvg path={pune} location="Pune" />
+                        </IconButton>
+                        <Item>Pune</Item>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <IconButton
+                          onClick={() => {
+                            handleModalClose();
+                            setLocation("Mumbai");
+                          }}
+                        >
+                          <LocationSvg path={mumbai} location="Mumbai" />
+                        </IconButton>
+                        <Item>Mumbai</Item>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <IconButton
+                          onClick={() => {
+                            handleModalClose();
+                            setLocation("Surat");
+                          }}
+                        >
+                          <LocationSvg path={surat} location="Surat" />
+                        </IconButton>
+                        <Item>Surat</Item>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <IconButton
+                          onClick={() => {
+                            handleModalClose();
+                            setLocation("Chennai");
+                          }}
+                        >
+                          <LocationSvg path={chennai} location="chennai" />
+                        </IconButton>
+                        <Item>Chennai</Item>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Box>
+              </Modal>
+
+              <Autocomplete
+                id="combo-box-demo"
+                options={products}
+                onChange={(event, option) => {
+                  navigate(`/product/${option._id}`, {
+                    state: { productId: option._id },
+                  });
+                }}
+                renderInput={(params) => {
+                  const { InputLabelProps, InputProps, ...rest } = params;
+                  return (
+                    <Search>
+                      <SearchIconWrapper>
+                        <SearchIcon />
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                        {...params.InputProps}
+                        {...rest}
+                        placeholder="Search…"
+                      />
+                    </Search>
+                  );
+                }}
+              />
+            </Toolbar>
+          </AppBar>
+
+          <Drawer
+            anchor="left"
+            open={openDrawer}
+            sx={{
+              width: 240,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: 240,
+                boxSizing: "border-box",
+                p: 4,
+              },
+            }}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <h5>Shop By Artists</h5>
+            {artists.map((artist, index) => {
+              return (
+                <List key={index}>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      handleDrawerClose();
+                      navigate("/product/artists", {
+                        state: { _id: artist["_id"] },
+                      });
                     }}
                   >
-                    {userData.userName}'s Profile
-                  </Link>
-                </MenuItem>
-
-                <MenuItem onClick={logout}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
-          </Toolbar>
-        </AppBar>
-
-        <AppBar position="static" className="search-nav">
-          <Toolbar variant="dense" className="search-toolbar">
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={handleDrawerOpen}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Button onClick={handleModalOpen}>{location}</Button>
-
-            <Modal
-              keepMounted
-              open={openModal}
-              onClose={handleModalClose}
-              aria-labelledby="keep-mounted-modal-title"
-              aria-describedby="keep-mounted-modal-description"
-            >
-              <Box className="modal-box">
-                <div className="locations">
-                  <Grid
-                    container
-                    rowSpacing={1}
-                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                  >
-                    <Grid item xs={6}>
-                      <IconButton
-                        onClick={() => {
-                          handleModalClose();
-                          setLocation("Pune");
-                        }}
-                      >
-                        <LocationSvg path={pune} location="Pune" />
-                      </IconButton>
-                      <Item>Pune</Item>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <IconButton
-                        onClick={() => {
-                          handleModalClose();
-                          setLocation("Mumbai");
-                        }}
-                      >
-                        <LocationSvg path={mumbai} location="Mumbai" />
-                      </IconButton>
-                      <Item>Mumbai</Item>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <IconButton
-                        onClick={() => {
-                          handleModalClose();
-                          setLocation("Surat");
-                        }}
-                      >
-                        <LocationSvg path={surat} location="Surat" />
-                      </IconButton>
-                      <Item>Surat</Item>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <IconButton
-                        onClick={() => {
-                          handleModalClose();
-                          setLocation("Chennai");
-                        }}
-                      >
-                        <LocationSvg path={chennai} location="chennai" />
-                      </IconButton>
-                      <Item>Chennai</Item>
-                    </Grid>
-                  </Grid>
-                </div>
-              </Box>
-            </Modal>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-          </Toolbar>
-        </AppBar>
-
-        <Drawer
-          anchor="left"
-          open={openDrawer}
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: 240,
-              boxSizing: "border-box",
-              p: 4,
-            },
-          }}
-        >
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <h5>Shop By Artists</h5>
-          {artists.map((artist, index) => {
-            return (
-              <List key={index}>
-                <ListItem
-                  button
-                  onClick={() => {
-                    handleDrawerClose();
-                    navigate("/product/artists", {
-                      state: { _id: artist["_id"] },
-                    });
-                  }}
-                >
-                  <ListItemIcon>
-                    <PersonOutlineIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={artist.userName} />
-                </ListItem>
-              </List>
-            );
-          })}
-
-          <Divider />
-          <h5>Shop By Categories</h5>
-          <List>
-            {tags.map((tag, index) => {
-              return (
-                <ListItem
-                  key={index}
-                  button
-                  onClick={() => {
-                    handleDrawerClose();
-                    navigate("/product/tags", {
-                      state: { tag: tag },
-                    });
-                  }}
-                >
-                  <ListItemIcon>
-                    <LabelIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={tag} />
-                </ListItem>
+                    <ListItemIcon>
+                      <PersonOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={artist.userName} />
+                  </ListItem>
+                </List>
               );
             })}
-          </List>
 
-          <Divider />
-          <h5>Help and Settings</h5>
-          <List>
-            <ListItem
-              button
-              onClick={() => {
-                handleDrawerClose();
-                navigate(`/profile/${userData["userType"]}/${userData["_id"]}`);
-              }}
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Your Account" />
-            </ListItem>
-          </List>
-        </Drawer>
-      </ThemeProvider>
-    </div>
-  );
+            <Divider />
+            <h5>Shop By Categories</h5>
+            <List>
+              {tags.map((tag, index) => {
+                return (
+                  <ListItem
+                    key={index}
+                    button
+                    onClick={() => {
+                      handleDrawerClose();
+                      navigate("/product/tags", {
+                        state: { tag: tag },
+                      });
+                    }}
+                  >
+                    <ListItemIcon>
+                      <LabelIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={tag} />
+                  </ListItem>
+                );
+              })}
+            </List>
+
+            <Divider />
+            <h5>Help and Settings</h5>
+            <List>
+              <ListItem
+                button
+                onClick={() => {
+                  handleDrawerClose();
+                  navigate(
+                    `/profile/${userData["userType"]}/${userData["_id"]}`
+                  );
+                }}
+              >
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Your Account" />
+              </ListItem>
+            </List>
+          </Drawer>
+        </ThemeProvider>
+      </div>
+    );
 };
 
 export default Navbar;
