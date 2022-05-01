@@ -2,8 +2,6 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -92,16 +90,13 @@ const SignIn = () => {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 color="success"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, width: 200 }}
               >
                 Sign In
               </Button>
@@ -111,7 +106,7 @@ const SignIn = () => {
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item>
+                <Grid item xs>
                   <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>

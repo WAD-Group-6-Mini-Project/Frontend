@@ -2,9 +2,7 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
@@ -80,7 +78,12 @@ const SignUp = () => {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+              sx={{
+                mt: 1,
+                width: 1000,
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
               <TextField
                 margin="normal"
@@ -163,13 +166,6 @@ const SignUp = () => {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Card>
