@@ -363,6 +363,8 @@ const Navbar = (props) => {
               <Autocomplete
                 id="combo-box-demo"
                 options={products}
+                getOptionLabel={(option) => option.name}
+                style={{ width: "25%" }}
                 onChange={(event, option) => {
                   navigate(`/product/${option._id}`, {
                     state: { productId: option._id },
